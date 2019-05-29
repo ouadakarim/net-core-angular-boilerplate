@@ -1,0 +1,27 @@
+version: '3.1'
+
+services:
+  api:
+    build:
+      context: ./api/Api
+      dockerfile: Dockerfile
+    working_dir: /code
+    command: dotnet run
+    volumes:
+      - ./api/Api:/code
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+
+  web:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    command: ng serve --host 0.0.0.0
+    volumes:
+      - ./client:/code
+      - /code/node_modules
+    ports:
+      - "4200:4200"
+    depends_on:
+      - api
